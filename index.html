@@ -619,10 +619,13 @@ async function doRegister() {
 
   if (!email || !name || !pw) { errEl.textContent = 'Semua field wajib diisi.'; return; }
 
-  // Validasi nama minimal 4 kata
-  const words = name.split(/\s+/).filter(w => w.length > 0);
-  if (words.length < 4) { errEl.textContent = 'Nama minimal 4 kata ya.'; return; }
+  // Validasi nama minimal 2 karakter
+  if (name.length < 2) { errEl.textContent = 'Nama minimal 2 karakter ya.'; return; }
+
+  // Validasi password: minimal 6 karakter, ada huruf besar, ada angka
   if (pw.length < 6) { errEl.textContent = 'Password minimal 6 karakter.'; return; }
+  if (!/[A-Z]/.test(pw)) { errEl.textContent = 'Password harus ada huruf besar.'; return; }
+  if (!/[0-9]/.test(pw)) { errEl.textContent = 'Password harus ada angka.'; return; }
 
   const btn = document.getElementById('btnRegister');
   btn.disabled = true;
@@ -651,7 +654,7 @@ async function doRegister() {
 async function doGoogle() {
   await sb.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: window.location.href }
+    options: { redirectTo: window.location.origin + window.location.pathname }
   });
 }
 
